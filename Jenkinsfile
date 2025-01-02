@@ -35,6 +35,7 @@ pipeline {
             steps {
                 sh '''
                     #test -f build/index.html
+                    npm i react-scripts
                     npm test
                 '''
             }
