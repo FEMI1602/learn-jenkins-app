@@ -22,11 +22,14 @@ pipeline {
             }
         } 
 
-        stage('Test') {
-            agent {
-                docker {
-                    image 'node:18-alpine'
-                    reuseNode true
+
+        stage('Run Tests'){
+            parallel{
+                 stage('Unit Tests') {
+                    agent {
+                        docker {
+                        image 'node:18-alpine'
+                        reuseNode true
                 }
             }
 
@@ -36,13 +39,13 @@ pipeline {
                     npm test
                 '''
             }
-        }
+        } 
 
-        stage('E2E') {
-            agent {
-                docker {
-                    image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
-                    reuseNode true
+                stage('E2E') {
+                    agent {
+                        docker {
+                            image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
+                            reuseNode true
                 }
             }
 
@@ -53,6 +56,8 @@ pipeline {
                     sleep 10
                     npx playwright test --reporter=html
                 '''
+            }
+        }       
             }
         }
     }
